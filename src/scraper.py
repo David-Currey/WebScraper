@@ -5,10 +5,15 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 
-# resource
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+# from webdriver_manager.chrome import ChromeDriverManager
+
+# resources
+# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+service = ChromeService(
+    r"C:\Users\dcurr\chromeDriver\chromedriver-win32\chromedriver.exe"
+)
+driver = webdriver.Chrome(service=service)
 driver.get("https://quotes.toscrape.com")
 
 # driver.find_element(By.LINK_TEXT, "login").click()
