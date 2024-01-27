@@ -1,8 +1,7 @@
 import csv
-import getpass
-import time
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 
@@ -16,30 +15,25 @@ service = ChromeService(
 driver = webdriver.Chrome(service=service)
 driver.get("https://quotes.toscrape.com")
 
-# driver.find_element(By.LINK_TEXT, "login").click()
-
-"""
-time.sleep(3)
-username = driver.find_element(By.ID, "username")
-password = driver.find_element(By.ID, "password")
-username.send_keys("admin")
-my_pass = getpass.getpass()
-password.send_keys(my_pass)
-driver.find_element(By.CSS_SELECTOR, "input.btn-primary").click()
-"""
-
-# data
-quotes = driver.find_elements(By.CLASS_NAME, "text")
-authors = driver.find_elements(By.CLASS_NAME, "author")
-
 # create csv
-file = open("scraped_data.csv", "w")
+file = open("scraped_data.csv", "w", encoding="utf-8")
 writer = csv.writer(file)
 writer.writerow(["QUOTES", "AUTHORS"])
 
-# display data in console and add to csv file
-for quote, author in zip(quotes, authors):
-    print(quote.text + " - " + author.text)
-    writer.writerow([quote.text, author.text])
+while True:
+    # data
+    quotes = driver.find_elements(By.CLASS_NAME, "text")
+    authors = driver.find_elements(By.CLASS_NAME, "author")
+
+    # display data in console and add to csv file
+    for quote, author in zip(quotes, authors):
+        print(quote.text + " - " + author.text)
+        writer.writerow([quote.text, author.text])
+    try:
+        driver.find_element(
+            By.PARTIAL_LINK_TEXT, "Next"
+        ).click()  # click next page button
+    except NoSuchElementException:
+        break
 file.close()  # close csv
 driver.quit()  # close driver
