@@ -1,4 +1,5 @@
 import csv
+import time
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -14,6 +15,9 @@ service = ChromeService(
 )
 driver = webdriver.Chrome(service=service)
 driver.get("https://quotes.toscrape.com")
+
+# wait for page
+time.sleep(3)
 
 # create csv
 file = open("scraped_data.csv", "w", encoding="utf-8")
