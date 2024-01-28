@@ -1,7 +1,10 @@
 import csv
+import random
+import time
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 
@@ -12,27 +15,34 @@ from selenium.webdriver.common.by import By
 service = ChromeService(
     r"C:\Users\dcurr\chromeDriver\chromedriver-win32\chromedriver.exe"
 )
-driver = webdriver.Chrome(service=service)
-driver.get("https://quotes.toscrape.com")
+options = Options()
+options.add_argument(
+    "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.86 Safari/537.36"
+)
+driver = webdriver.Chrome(service=service, options=options)
+driver.get("https://www.loblaws.ca/food/c/27985?page=1")
+
+time.sleep(8)
 
 # create csv
 file = open("scraped_data.csv", "w", encoding="utf-8")
 writer = csv.writer(file)
-writer.writerow(["QUOTES", "AUTHORS"])
+writer.writerow(["PRODUCT", "PRICE"])
 
 while True:
     # data
-    quotes = driver.find_elements(By.CLASS_NAME, "text")
-    authors = driver.find_elements(By.CLASS_NAME, "author")
+    titles = driver.find_elements(By.CSS_SELECTOR, '[data-testid="product-title"]')
+    prices = driver.find_elements(By.CSS_SELECTOR, '[data-testid="price"]')
 
     # display data in console and add to csv file
-    for quote, author in zip(quotes, authors):
-        print(quote.text + " - " + author.text)
-        writer.writerow([quote.text, author.text])
+    for title, price in zip(titles, prices):
+        print(f"{title.text} - {price.text}")
+        writer.writerow([title.text, price.text])
     try:
-        driver.find_element(
-            By.PARTIAL_LINK_TEXT, "Next"
-        ).click()  # click next page button
+        next_button = driver.find_element(By.CSS_SELECTOR, '[aria-label="Next Page"]')
+        driver.execute_script("arguments[0].scrollIntoView();", next_button)
+        next_button.click()
+        time.sleep(random.randint(0, 3))
     except NoSuchElementException:
         break
 file.close()  # close csv
