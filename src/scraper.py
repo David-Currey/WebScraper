@@ -8,10 +8,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 
-# from webdriver_manager.chrome import ChromeDriverManager
-
 # resources
-# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+
 service = ChromeService(
     r"C:\Users\dcurr\chromeDriver\chromedriver-win32\chromedriver.exe"
 )
