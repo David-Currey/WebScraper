@@ -11,7 +11,7 @@ from selenium.webdriver.common.by import By
 # resources
 
 service = ChromeService(
-    r"C:\Users\dcurr\chromeDriver\chromedriver-win32\chromedriver.exe"
+    "service path"
 )
 options = Options()
 options.add_argument(
