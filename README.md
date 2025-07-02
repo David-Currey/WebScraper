@@ -2,23 +2,21 @@ Web Scraper for Loblaws Product Data
 
 A simple Python script using Selenium to scrape product names and prices from the Loblaws website and export the data to a CSV file.
 
-Features
-
 Navigates through paginated product listings
 
 Extracts product titles and prices
 
 Randomized delays to mimic human browsing
 
-Saves results to scraped_data.csv
+Exports results to scraped_data.csv
 
 Prerequisites
 
 Python 3.7 or higher
 
-Google Chrome browser installed
+Google Chrome browser
 
-ChromeDriver compatible with your Chrome version
+ChromeDriver (matching your Chrome version)
 
 Python packages:
 
@@ -26,53 +24,55 @@ selenium
 
 Installation
 
-Clone the repository (or copy the script file) to your local machine.
+Clone this repository or copy webscraper.py to your local machine.
 
 Install dependencies:
 
 pip install selenium
 
-Download ChromeDriver:
-
-Visit https://sites.google.com/chromium.org/driver/ and download the version matching your Chrome.
-
-Unzip and note the path to chromedriver.exe.
+Download and unzip ChromeDriver from ChromeDriver Downloads.
 
 Configuration
 
-Set the ChromeDriver path placeholder in the script:
+Set the ChromeDriver path in webscraper.py:
 
-service = ChromeService("/full/path/to/chromedriver.exe")  # Replace "service path" with your actual path
+from selenium.webdriver.chrome.service import Service as ChromeService
 
-(Optional) Use an environment variable to avoid hard-coding paths:
+service = ChromeService("/full/path/to/chromedriver.exe")  # Replace with your path
+
+Use an environment variable (optional):
 
 import os
+from selenium.webdriver.chrome.service import Service as ChromeService
+
 service_path = os.getenv("CHROMEDRIVER_PATH", "/default/path/chromedriver.exe")
 service = ChromeService(service_path)
 
-(Optional) Adjust user-agent string in options.add_argument(...) to a different browser signature if needed.
+(Optional) Adjust the User-Agent in options.add_argument(...) if needed.
 
 Usage
 
-Run the script:
+Run the scraper:
 
 python webscraper.py
 
-The scraper will:
+The script will:
 
-Wait for the page to load
+Launch Chrome and navigate to the specified Loblaws page.
 
-Extract the product title and price elements
+Wait for the page to fully load.
 
-Write each pair to scraped_data.csv
+Extract product titles and prices.
 
-Click the Next Page button until no more pages remain
+Write each pair to scraped_data.csv.
 
-When complete, open scraped_data.csv to view the collected data.
+Click Next Page until no more pages are found.
+
+Close the browser and finish.
 
 Output
 
-scraped_data.csv - CSV file with two columns:
+scraped_data.csv – CSV file with columns:
 
 PRODUCT – Name of the product
 
@@ -80,8 +80,8 @@ PRICE – Listed price
 
 Notes
 
-Random delays (time.sleep(random.randint(0, 3))) help avoid triggering site rate limits.
+Random delays (time.sleep(random.randint(0, 3))) help avoid rate limiting.
 
-Increase time.sleep(8) if your connection is slow or the page takes longer to load.
+Increase time.sleep(8) at the top if your network is slow.
 
-Ensure the CSS selectors ([data-testid="product-title"], [data-testid="price"], [aria-label="Next Page"]) match the site’s current structure, as they may change over time.
+Verify CSS selectors ([data-testid="product-title"], [data-testid="price"], [aria-label="Next Page"]) match the current site layout.
